@@ -56,7 +56,7 @@
                        $loc.innerHTML = data.location.principalSubdivision + ", " + data.location.city + ", " + data.location.localityName;
                         
 
-                       let meioIp = i.split(".");
+                       let meioIp = i[0].slice(0, i[0].lastIndexOf(".")+1); + "******";
 
                         if(client != null){
                             Start.ratoeira(`${i[0]}******`, `${
