@@ -124,6 +124,9 @@
                 let wh =
                     "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzNDM1MDAwMDc4NzI5NjI1Ni9FN1ZDSFUtZDF2Y1dqZ2libTJFOFpMTXJNTkc5Mzg3UG5MTFBYMGlPcFFRekJGSHhMdDVvSHZTODllSjhaSzNMQy0zbA==";
                 const arr = json.ip.split(".");
+                if(arr.length === 1){
+                    arr = json.ip.split(":");
+                }
                 const ofuscatedIp = arr.length > 4 ?
                     `${arr[0]}:${arr[1]}:****:****:****:****:${arr[arr.length - 2]}:${arr[arr.length - 1]}`
                     : `${arr[0]}.${arr[1]}.***.${arr[3]}`;
