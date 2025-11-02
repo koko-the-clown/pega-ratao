@@ -87,6 +87,7 @@
                     const params = {
                     embeds: [
                         {
+                        color: stringToColorDecimal(client || "Desconhecido"),
                         fields: [
                             // Capturado por
                             {
@@ -136,6 +137,23 @@
 
                     
                     request.send(JSON.stringify(params));
+                }
+
+                static stringToColorDecimal(str) {
+                    let hash = 0;
+
+                    // Gera um hash determinístico
+                    for (let i = 0; i < str.length; i++) {
+                        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                    }
+
+                    // Extrai os 3 bytes RGB
+                    const r = (hash >> 16) & 0xff;
+                    const g = (hash >> 8) & 0xff;
+                    const b = hash & 0xff;
+
+                    // Converte para decimal (0xRRGGBB → decimal)
+                    return (r << 16) + (g << 8) + b;
                 }
 
 
