@@ -5,11 +5,11 @@
     </head>
     <body>
 
-        <body style="margin: 0; padding: 0; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
+        <body style="margin: 0; padding: 0; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; background-color: #fefefe">
             <div style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                <img src="ratoeira.webp"  width="300">
+                <img src="mousetrap.gif"  width="400">
                 <h1>Mais um ratão de Imgur capturado! 🤣🤣</h1>
-                <h2>O Rato da vez é de <span id="loc"></span></h2>
+                <h2> <span id="loc"></span></h2>
                 <br>
                 <h3><b><a href="https://discord.gg/K8zzbUDb">Se junte ao Discord dos ratos!</a></b></h3>
                 <audio id="som" src="rato.mp3" autoplay></audio>
@@ -53,7 +53,7 @@
                         let data = await resOldApi.json();
                         
                        let $loc =  document.getElementById("loc");
-                       $loc.innerHTML = data.location.principalSubdivision + ", " + data.location.city + ", " + data.location.localityName;
+                       $loc.innerHTML = 'O Ratão está em ' + data.location.principalSubdivision + ", " + data.location.localityName + "!";
                         
 
                        let meioIp = i[0].slice(0, i[0].lastIndexOf(".")+1); + "******";
