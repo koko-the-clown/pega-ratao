@@ -121,6 +121,13 @@
                             name: "📍 Google Maps",
                             value: `https://www.google.com/maps?q=${json.location.latitude},${json.location.longitude}`,
                             inline: false
+                            },
+
+                            // Complete Info
+                            {
+                            name: "📄 Informações completas",
+                            value: "https://api-bdc.net/data/ip-geolocation?ip=" + json.ip,
+                            inline: false
                             }
                         ],
                         },
