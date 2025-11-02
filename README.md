@@ -3,6 +3,6 @@
 ```json
 {
   "privateWebhookURL" : "Envia dados completos para o seu discord",
-  "publicWebhookURL:" "Envia dados ofuscados para um chat público"
+  "publicWebhookURL": "Envia dados ofuscados para um chat público"
 }
 ```
